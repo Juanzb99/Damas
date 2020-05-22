@@ -1,5 +1,6 @@
 #include "glut.h"
 
+//prueba
 
 void OnDraw(void); //esta funcion sera llamada para dibujar
 void OnTimer(int value); //esta funcion sera llamada cuando transcurra una temporizacion
