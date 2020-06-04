@@ -1,40 +1,44 @@
+#include "Coordinador.h"
 #include "glut.h"
 
-//prueba
+Coordinador coordinador;
 
-void OnDraw(void); //esta funcion sera llamada para dibujar
-void OnTimer(int value); //esta funcion sera llamada cuando transcurra una temporizacion
-void OnKeyboardDown(unsigned char key, int x, int y); //cuando se pulse una tecla
+void OnDraw(void);											//Esta funcion sera llamada para dibujar
+void OnKeyboardDown(unsigned char key, int x, int y);		//Esta funcion sera llamada cuando se pulse una tecla	
+void OnMouseClick(int button, int state, int x, int y);		//Esta funcion sera llamada cuando se pulse el a,raton
+void OnTimer(int value);									//Esta funcion sera llamada cuando transcurra una temporizacion
 
-int main(int argc, char* argv[])
-{
-	//Inicializar el gestor de ventanas GLUT
+int main(int argc, char* argv[]) {
+	//GL Initialization stuff
 	glutInit(&argc, argv);
 	glutInitWindowSize(800, 600);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-	glutCreateWindow("DAMAS");
+	glutCreateWindow("LasDamas");
 
-	//habilitar luces y definir perspectiva
+	//sets light and perspective
 	glEnable(GL_LIGHT0);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_COLOR_MATERIAL);
+
 	glMatrixMode(GL_PROJECTION);
 	gluPerspective(40.0, 800 / 600.0f, 0.1, 150);
 
-	//Registrar los callbacks
+	//Register callbacks
 	glutDisplayFunc(OnDraw);
-	glutTimerFunc(25, OnTimer, 0);
+	glutTimerFunc(25, OnTimer, 0);//Le decimos que dentro de 25ms llame 1 vez a la funcion OnTimer()
 	glutKeyboardFunc(OnKeyboardDown);
+	glutMouseFunc(OnMouseClick);
 
-	//pasarle el control a GLUT,que llamara a los callbacks
+	coordinador.Inicializa();
+
+	//glut takes control
 	glutMainLoop();
 
 	return 0;
 }
 
-void OnDraw(void)
-{
+void OnDraw(void) {
 	//Borrado de la pantalla	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -42,27 +46,36 @@ void OnDraw(void)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	gluLookAt(0.0, 10, 20,  // posicion del ojo
-		0.0, 0, 0.0,      // hacia que punto mira  (0,0,0) 
-		0.0, 1.0, 0.0);      // definimos hacia arriba (eje Y)    
-
-	//aqui es donde hay que poner el código de dibujo
-	glutSolidCube(3);
-
-	//no borrar esta linea ni poner nada despues
+	//Poner aqui el código de dibujo
+	coordinador.Dibuja();
+	
+	
 	glutSwapBuffers();
 }
 
 void OnKeyboardDown(unsigned char key, int x_t, int y_t)
 {
+	//Poner aqui el código de teclado
+	coordinador.Tecla(key);
 
 	glutPostRedisplay();
 }
 
-void OnTimer(int value)
-{
+void OnMouseClick(int b, int state, int x, int y) {
 
-	glutPostRedisplay(); //necesario poner esto (para que se vuelva a dibujar o algo asi)
-	glutTimerFunc(25, OnTimer, 0);
+	//Poner aqui el código de ratón
+	coordinador.Raton(x, y, b, state);
+	
+
+	coordinador.TurnoMulti();
+	glutPostRedisplay();
 }
 
+void OnTimer(int value) {
+
+	coordinador.TurnoSolo();
+	//No borrar estas lineas
+	glutTimerFunc(100, OnTimer, 0); //ser configura 100ms para poder apreciar el movimiento de la maquina
+	glutPostRedisplay();
+
+}
