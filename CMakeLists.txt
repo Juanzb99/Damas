@@ -2,17 +2,16 @@ cmake_minimum_required (VERSION 3.0)
 
 PROJECT(GAME_GL)
 
-SET(lib_dir	${CMAKE_CURRENT_SOURCE_DIR}/lib)
-SET(bin_dir     ${CMAKE_CURRENT_SOURCE_DIR}/bin)
-SET(headers_dir ${CMAKE_CURRENT_SOURCE_DIR}/headers)
-SET(src_dir     ${CMAKE_CURRENT_SOURCE_DIR}/src)
+SET(include_dir	${CMAKE_CURRENT_SOURCE_DIR}/include)
+SET(bin_dir ${CMAKE_CURRENT_SOURCE_DIR}/bin)
+SET(src_dir ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 
 #local includes
-INCLUDE_DIRECTORIES(${lib_dir})
+INCLUDE_DIRECTORIES(${include_dir})
 
 #glutLibraries (must be in include folder)
-LINK_DIRECTORIES(${lib_dir})
+LINK_DIRECTORIES(${include_dir})
 
 
 #bin output
@@ -29,5 +28,5 @@ ${src_dir}/Tablero.cpp
 ${src_dir}/Tabuleiro.cpp
 )
 
-TARGET_LINK_LIBRARIES(boardgame glut32)
+TARGET_LINK_LIBRARIES(boardgame glut64)
 TARGET_LINK_LIBRARIES(boardgame ETSIDI)
