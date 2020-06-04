@@ -30,3 +30,4 @@ ${src_dir}/Tabuleiro.cpp
 )
 
 TARGET_LINK_LIBRARIES(boardgame glut32)
+TARGET_LINK_LIBRARIES(boardgame ETSIDI)
